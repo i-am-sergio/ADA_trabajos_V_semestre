@@ -4,7 +4,7 @@
 using namespace std;
 
 // Criterio: Valor Maximo
-void mochila1(int M, array<int,5>& b, array<int,5>& p, array<double,5>& x){ //30 50 40/2 valor: 146
+void mochila1(int M, array<int,3>& b, array<int,3>& p, array<double,3>& x){ //30 50 40/2 valor: 146
     int n = x.size();
     for(int i=0; i<n; i++){ // se inicializa con ceros
         x[i] = 0;
@@ -23,12 +23,16 @@ void mochila1(int M, array<int,5>& b, array<int,5>& p, array<double,5>& x){ //30
                 mayor = b[k];
             }
         }
+
+
         for(int k=0; k<b.size(); k++){
             if(b[k]==mayor && visitados[k]==0){
                 i = k; 
                 visitados[k] = 1;
             }
         }
+        
+        cout<<"mayor"<<mayor<<endl;
 
         if(pesoAct+p[i] <= M) {
             x[i] = 1;
@@ -131,13 +135,29 @@ void mochila3(int M, array<int,5>& b, array<int,5>& p, array<double,5>& x){ //30
         }
     }
 }
-
+/*
 int main(){
     int M = 100;
     array<int,5> valoresObjetos = {20,60,40,30,66}; // b
     array<int,5> pesosObjetos = {10,50,40,20,30}; // p
     array<double,5> solucion; // X
-    mochila3(M,valoresObjetos,pesosObjetos,solucion);
+    mochila1(M,valoresObjetos,pesosObjetos,solucion);
+
+    double valorTotal = 0;
+    for(int i=0; i<solucion.size();i++){
+        cout<<"Obj "<<i+1<<" => s:"<<solucion[i]<<" | p:"<<pesosObjetos[i]<<" | v:"<<valoresObjetos[i]<<" = "<<solucion[i]*valoresObjetos[i]<<endl;
+        valorTotal += (solucion[i]*valoresObjetos[i]);
+    }
+    cout<<"Valor Total: "<<valorTotal;
+    return 0;
+}*/
+
+int main(){
+    int M = 20;
+    array<int,3> valoresObjetos = {25,24,15}; // b
+    array<int,3> pesosObjetos = {18,15,10}; // p
+    array<double,3> solucion; // X
+    mochila1(M,valoresObjetos,pesosObjetos,solucion);
 
     double valorTotal = 0;
     for(int i=0; i<solucion.size();i++){
