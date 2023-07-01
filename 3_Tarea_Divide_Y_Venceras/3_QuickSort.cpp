@@ -11,7 +11,7 @@ void Swap(int &elem1, int &elem2)
 
 void MyQuickSort(int Array[], int primero, int ultimo){
     int pivote;
-    int mayor = primero; // Inicializar el índice del elemento mayor
+    int mayor = primero; //índice del elemento mayor
 
     if (primero < ultimo) {
         pivote = ultimo;
@@ -25,8 +25,8 @@ void MyQuickSort(int Array[], int primero, int ultimo){
 
         Swap(Array[mayor], Array[ultimo]);
 
-        MyQuickSort(Array, primero, mayor - 1); // Llamada recursiva para la parte izquierda
-        MyQuickSort(Array, mayor + 1, ultimo);  // Llamada recursiva para la parte derecha
+        MyQuickSort(Array, primero, mayor - 1); // Llamada recursiva parte izquierda
+        MyQuickSort(Array, mayor + 1, ultimo);  // Llamada recursiva parte derecha
     }
 }
 
