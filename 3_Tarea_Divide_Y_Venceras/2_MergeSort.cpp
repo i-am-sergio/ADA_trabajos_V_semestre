@@ -26,12 +26,12 @@ void Merge(int myArray[], int inicio, int medio, int fin) {
         k++;
     }
     
-    while (i < sizeIzq) { // Copia los elementos restantes del subarreglo izquierdo
+    while (i < sizeIzq) { // Copia los elementos restantes del subArrayIzq
         myArray[k] = subArrayIzq[i];
         i++; k++;
     }
     
-    while (j < sizeDer) { // Copia los elementos restantes del subarreglo derecho, si hay alguno
+    while (j < sizeDer) { // Copia los elementos restantes del subArrayDer
         myArray[k] = subArrayDer[j];
         j++; k++;
     }
