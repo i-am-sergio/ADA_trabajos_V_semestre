@@ -2,38 +2,34 @@
 #include <vector>
 using namespace std;
 
-void swap(int &elem1, int &elem2)
+void Swap(int &elem1, int &elem2)
 { // Intercarmbia dos elementos
     int temp = elem1;
     elem1 = elem2;
     elem2 = temp;
 }
 
-int elegirPivote(int Array[], int primero, int ultimo)
-{
-    int contador = primero;
-    for (int i = primero + 1; i <= ultimo; i++)
-    {
-        if (Array[i] <= Array[primero])
-        {
-            contador++;
-            swap(Array[i], Array[contador]);
+void MyQuickSort(int Array[], int primero, int ultimo){
+    int pivote;
+    int mayor = primero; // Inicializar el índice del elemento mayor
+
+    if (primero < ultimo) {
+        pivote = ultimo;
+
+        for (int i = primero; i < ultimo; i++) {
+            if (Array[i] <= Array[pivote]) {
+                Swap(Array[i], Array[mayor]);
+                mayor++;
+            }
         }
+
+        Swap(Array[mayor], Array[ultimo]);
+
+        MyQuickSort(Array, primero, mayor - 1); // Llamada recursiva para la parte izquierda
+        MyQuickSort(Array, mayor + 1, ultimo);  // Llamada recursiva para la parte derecha
     }
-    swap(Array[contador], Array[primero]);
-    return contador;
 }
 
-void QuickSort(int Array[], int primero, int ultimo)
-{
-    int pivote;
-    if (primero < ultimo)
-    {
-        pivote = elegirPivote(Array, primero, ultimo);
-        QuickSort(Array, primero, pivote - 1); // Izquierda
-        QuickSort(Array, pivote + 1, ultimo);  // Derecha
-    }
-}
 
 void printVector(int Array[], int size)
 {
@@ -46,9 +42,9 @@ void printVector(int Array[], int size)
 
 int main()
 {
-    int numeros[] = {3, 2, 5, 0, 1, 8, 7, 6, 9, 4};
-    printVector(numeros, 10);
-    QuickSort(numeros, 0, 9);
-    printVector(numeros, 10);
+    int numeros[] = {23, 5, 17, 28, 1, 11, 30, 6, 19, 8, 25, 13, 4, 16, 2, 7, 20, 9, 12, 22, 15, 10, 3, 27, 18, 14, 24, 26, 29, 21};
+    printVector(numeros, 30);
+    MyQuickSort(numeros, 0, 29);
+    printVector(numeros, 30);
     return 0;
 }
