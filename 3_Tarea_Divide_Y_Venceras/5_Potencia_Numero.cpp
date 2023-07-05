@@ -11,9 +11,9 @@ double Potencia(double base, double exponente){ // 2^10
 }
 
 int main(){
-    double num = 5;
+    double num = -3;
     double exponente = -2;
     double resultado = Potencia(num,exponente);
-    cout<<"Resultado => "<<resultado*5;
+    cout<<"Resultado => "<<resultado;
     return 0;
 }

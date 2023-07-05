@@ -60,5 +60,7 @@ int main() {
         cout << monedas[i] << " \t=> " << solucion[i] << endl;
     }
 
+    vector<int> monedas2 = {100,90,1};
+    vector<int> solucion(monedas2.size());
     return 0;
 }

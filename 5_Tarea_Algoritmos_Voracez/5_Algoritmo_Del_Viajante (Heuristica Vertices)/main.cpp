@@ -1,2 +1,2 @@
 #include <iostream>
-using namespaces std;
+using namespace std;

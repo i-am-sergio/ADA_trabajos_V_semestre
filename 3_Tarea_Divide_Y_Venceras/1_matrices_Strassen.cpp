@@ -25,9 +25,25 @@ Matrix<int> RestaMatrices(Matrix<int> &matrix1, Matrix<int> &matrix2){
     return resultado;
 }
 
-int Matrices_Strassen(Matrix<int> & matrix1, Matrix<int> & matrix2)
+Matrix<int> Matrices_Strassen(Matrix<int> & matrix1, Matrix<int> & matrix2, int dimension)
 {
     // Matrix<int> M1 =  
+    if(n<=2){
+
+        // c = 4 formulas ...
+    } else {
+        int mid = dimension / 2;
+        // Matrices_Strassen(A11,B11,mid) + Matrices_Strassen(A12,B21,mid);
+        // Matrices_Strassen(A11,B12,mid) + Matrices_Strassen(A12,B22,mid);
+        // Matrices_Strassen(A21,B11,mid) + Matrices_Strassen(A22,B21,mid);
+        // Matrices_Strassen(A21,B12,mid) + Matrices_Strassen(A22,B22,mid);
+
+        for(int i=0; i<mid; i++){
+            for(int j=0; j<mid; j++){
+                
+            }
+        }
+    }
     return 0;
 }
 
