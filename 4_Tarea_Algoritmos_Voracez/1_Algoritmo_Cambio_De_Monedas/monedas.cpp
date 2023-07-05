@@ -1,7 +1,12 @@
 #include <iostream>
 #include <array>
+#include <vector>
+#include <algorithm>
+using namespace std;
 
-void devolverCambio(int P, std::array<int,7>& C, std::array<double,7>& X){
+
+void devolverCambio(int P, vector<int>& C, vector<int>& X){
+    sort(C.begin(), C.end());
     int n = C.size();
     int actual = 0;
     int j = n-1;
@@ -12,24 +17,47 @@ void devolverCambio(int P, std::array<int,7>& C, std::array<double,7>& X){
         while((C[j] > (P-actual)) && (j>0)){
             j = j-1;
         }
-        if(j==0){
+        if(j==0 && C[j]>(P-actual)){
             std::cout<<"No existe solucion"<<std::endl;
-            break; // Agregamos un break para salir del bucle si no hay solución
+            break;// Agregamos un break para salir del bucle si no hay solución
         }
-        X[j] = (P-actual)/static_cast<double>(C[j]); // Agregamos una conversión explícita a double
+        X[j] = (P-actual)/(C[j]); // Agregamos una conversión explícita a double
         actual = actual + C[j]*X[j]; // insertar
     }
 }
 
+/*
+otra version
+vector<int> cambioMonedas(int cantidad, const vector<int>& monedas) {
+    vector<int> cambio(monedas.size(), 0);
+    // Ordenamos las monedas de mayor a menor
+    vector<int> sortedmonedas = monedas;
+    sort(sortedmonedas.rbegin(), sortedmonedas.rend());
+
+    // Recorremos las monedas y vamos calculando el cambio
+    for (int i = 0; i < sortedmonedas.size(); i++) {
+        while (cantidad >= sortedmonedas[i]) {
+            cambio[i]++;
+            cantidad -= sortedmonedas[i];
+        }
+    }
+
+    return cambio;
+}
+*/
+
+
+
 int main() {
-    std::array<int, 7> C = {1, 2, 5, 10, 20, 50, 100};
-    std::array<double, 7> X;
-    int P = 123;
+    int cantidad = 389;
+    vector<int> monedas = {2,5,10,20,50,100,200}; // Diapositivas de la clase
+    vector<int> solucion(monedas.size());
+    devolverCambio(cantidad, monedas, solucion);
 
-    devolverCambio(P, C, X);
-
-    for (int i = 0; i < X.size(); i++) {
-        std::cout << "X[" << i << "] = " << X[i] << std::endl;
+    cout << "Cambio: " << endl;
+    cout << "valor  \t=> cantidad\n";
+    for (int i = 0; i < monedas.size(); i++) {
+        cout << monedas[i] << " \t=> " << solucion[i] << endl;
     }
 
     return 0;
