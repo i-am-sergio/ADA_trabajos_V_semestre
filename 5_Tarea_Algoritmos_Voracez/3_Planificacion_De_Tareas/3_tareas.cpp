@@ -41,16 +41,6 @@ void planificacionDeTareas(vector<Tarea> &candidatos, vector<Tarea> &solucion)
             }
             j--;
         }
-
-        // for (int j = plazoMinimo - 1; j >= 0; j--)
-        // {
-        //     if (escogidos[j] == false)
-        //     {
-        //         escogidos[j] = true;
-        //         solucion[j] = candidatos[i];
-        //         break;
-        //     }
-        // }
     }
 }
 
