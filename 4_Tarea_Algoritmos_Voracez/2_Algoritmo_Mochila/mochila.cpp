@@ -1,270 +1,102 @@
 #include <iostream>
-#include <array>
 #include <vector>
+#include <tuple>
+#include <algorithm>
 using namespace std;
 
-// Criterio: Valor Maximo
-void mochila1(int M, array<int,4>& b, array<int,4>& p, array<double,4>& x){ //30 50 40/2 valor: 146
-    int n = x.size();
-    for(int i=0; i<n; i++){ // se inicializa con ceros
-        x[i] = 0;
+// Función de comparación personalizada
+bool compararPor1erCampo(const std::tuple<int, int, double, bool> &a, const std::tuple<int, int, double, bool> &b)
+{
+    return std::get<0>(a) < std::get<0>(b);
+}
+
+bool compararPor2doCampo(const std::tuple<int, int, double, bool> &a, const std::tuple<int, int, double, bool> &b)
+{
+    return std::get<1>(a) < std::get<1>(b);
+}
+
+void mochila(int M, vector<tuple<int, int, double, bool>> &candidatos, int criterio)
+{
+    int n = candidatos.size();
+    for (int i = 0; i < n; i++)
+    {
+        std::get<2>(candidatos[i]) = 0;
+        std::get<3>(candidatos[i]) = false;
     }
+
     int pesoAct = 0;
 
-    vector<int> visitados(n,0);
-    int mayor;
-
-    while(pesoAct < M){
+    while (pesoAct < M)
+    {
         int i;
 
-        mayor = b[0];
-        for(int k=0; k<b.size(); k++){
-            if(b[k]>mayor && visitados[k]==0){ //{20,60,40,30,66};
-                mayor = b[k];
-            }
+        if (criterio == 1)
+        { // Valor Máximo
+            auto ptrCandidatoEscogido = max_element(candidatos.begin(), candidatos.end(), compararPor1erCampo);
+            i = distance(candidatos.begin(), ptrCandidatoEscogido);
+        }
+        else if (criterio == 2)
+        { // Peso Mínimo
+            auto ptrCandidatoEscogido = min_element(candidatos.begin(), candidatos.end(), compararPor2doCampo);
+            i = distance(candidatos.begin(), ptrCandidatoEscogido);
         }
 
-
-        for(int k=0; k<b.size(); k++){
-            if(b[k]==mayor && visitados[k]==0){
-                i = k; 
-                visitados[k] = 1;
-            }
+        if (pesoAct + std::get<0>(candidatos[i]) <= M)
+        {
+            std::get<2>(candidatos[i]) = 1;
+            pesoAct += std::get<0>(candidatos[i]);
         }
-        
-        cout<<"mayor"<<mayor<<endl;
-
-        if(pesoAct+p[i] <= M) {
-            x[i] = 1;
-            pesoAct = pesoAct+p[i];
-        }
-        else {
-            x[i] = (M-pesoAct)/((double)p[i]); // para obtener decimal en la division
+        else
+        {
+            std::get<2>(candidatos[i]) = (M - pesoAct) / static_cast<double>(std::get<0>(candidatos[i]));
             pesoAct = M;
         }
+
+        std::get<3>(candidatos[i]) = true; // Marcar el candidato como visitado
     }
 }
 
-// Criterio: Peso Minimo
-void mochila2(int M, array<int,4>& b, array<int,4>& p, array<double,4>& x){ //10 20 30 40 valor: 156
-    int n = x.size();
-    for(int i=0; i<n; i++){ // se inicializa con ceros
-        x[i] = 0;
-    }
+void ejemplo1()
+{
+    std::vector<std::tuple<int, int, double, bool>> candidatos;
 
-    vector<int> visitados(n,0);
-    int menor;
+    candidatos.emplace_back(10, 10, 0, false);
+    candidatos.emplace_back(3, 9, 0, false);
+    candidatos.emplace_back(3, 9, 0, false);
+    candidatos.emplace_back(4, 9, 0, false);
 
-    int pesoAct = 0;
-    while(pesoAct < M){
-        int i; // el mejor objeto restante
-        
-        for(int k=0; k<p.size(); k++){
-            if(visitados[k]==0){
-                menor = p[k];
-            }
-        }
-        for(int k=n-1; k>=0; k--){
-            if(p[k]<menor && visitados[k]==0){ //{20,60,40,30,66};
-                menor = p[k];
-            }
-        }
-        for(int k=n-1; k>=0; k--){
-            if(p[k]==menor && visitados[k]==0){
-                i = k;
-                visitados[k] = 1;
-            }
-        }
-        cout<<menor<<endl;
+    int capacidadMochila = 10;
 
-        if(pesoAct+p[i] <= M) {
-            x[i] = 1;
-            pesoAct = pesoAct+p[i];
-        }
-        else {
-            x[i] = (M-pesoAct)/((double)p[i]); // para obtener decimal en la division
-            pesoAct = M;
-        }
+    mochila(capacidadMochila, candidatos, 1);
+
+    for (const auto &tupla : candidatos)
+    {
+        std::cout << "Peso: " << std::get<0>(tupla) << ", Beneficio: " << std::get<1>(tupla) << ", Solucion: " << std::get<2>(tupla) << std::endl;
     }
 }
 
-// Criterio: Mejor Proporcion
-/*void mochila3(int M, array<int,5>& b, array<int,5>& p, array<double,5>& x){ //30 10 20 80%(50) valor: 164
-    int n = x.size();
-    for(int i=0; i<n; i++){ // se inicializa con ceros
-        x[i] = 0;
-    }
-    int pesoAct = 0;
+void ejemplo2()
+{
+    std::vector<std::tuple<int, int, double, bool>> candidatos;
 
-    vector<int> visitados(n,0);
-    vector<double> proporciones(n,0);
-    for(int i=0; i<n; i++){ // proporciones
-        proporciones[i] = b[i]/((double)p[i]); // valor / peso
-    }
+    candidatos.emplace_back(18, 25, 0, false);
+    candidatos.emplace_back(15, 24, 0, false);
+    candidatos.emplace_back(10, 15, 0, false);
 
-    double mayor;
+    int capacidadMochila = 20; // M
 
-    while(pesoAct < M){
-        int i;
-        for(int k=0; k<p.size(); k++){
-            if(visitados[k]==0){;
-                mayor = proporciones[k];
-            }
-        }
+    mochila(capacidadMochila, candidatos, 1);
 
-        for(int k=0; k<n; k++){
-            if(proporciones[k]>mayor && visitados[k]==0){ //{20,60,40,30,66};
-                mayor = proporciones[k];
-            }
-        }
-        for(int k=0; k<n; k++){
-            if(proporciones[k]==mayor && visitados[k]==0){
-                i = k; 
-                visitados[k] = 1;
-            }
-        }
-
-
-        if(pesoAct+p[i] <= M) {
-            x[i] = 1;
-            pesoAct = pesoAct+p[i];
-        }
-        else {
-            x[i] = (M-pesoAct)/((double)p[i]); // para obtener decimal en la division
-            pesoAct = M;
-        }
-    }
-}*/
-
-void mochila3(int M, array<int,4>& b, array<int,4>& p, array<double,4>& x){
-    int n = x.size();
-    for(int i=0; i<n; i++){
-        x[i] = 0;
-    }
-    int pesoAct = 0;
-
-    vector<int> visitados(n,0);
-    vector<double> proporciones(n,0);
-    for(int i=0; i<n; i++){
-        proporciones[i] = (double)b[i] / p[i]; // valor / peso
-    }
-    
-    double mayor;
-    while(pesoAct < M){
-        int i;
-        for(int k=0; k<n; k++){
-            if(visitados[k]==0){
-                mayor = proporciones[k];
-                i = k;
-                break;
-            }
-        }
-
-        for(int k=0; k<n; k++){
-            if(proporciones[k]>mayor && visitados[k]==0){
-                mayor = proporciones[k];
-                i = k;
-            }
-        }
-
-        visitados[i] = 1;
-
-        if(pesoAct + p[i] <= M) {
-            x[i] = 1;
-            pesoAct = pesoAct + p[i];
-        }
-        else {
-            x[i] = (M - pesoAct) / static_cast<double>(p[i]); // para obtener decimal en la división
-            pesoAct = M;
-        }
+    for (const auto &tupla : candidatos)
+    {
+        std::cout << "Peso: " << std::get<0>(tupla) << ", Beneficio: " << std::get<1>(tupla) << ", Solucion: " << std::get<2>(tupla) << std::endl;
     }
 }
 
-
-/*
-int main(){
-    int M = 100;
-    array<int,5> valoresObjetos = {20,60,40,30,66}; // b
-    array<int,5> pesosObjetos = {10,50,40,20,30}; // p
-    array<double,5> solucion; // X
-    mochila1(M,valoresObjetos,pesosObjetos,solucion);
-
-    double valorTotal = 0;
-    for(int i=0; i<solucion.size();i++){
-        cout<<"Obj "<<i+1<<" => s:"<<solucion[i]<<" | p:"<<pesosObjetos[i]<<" | v:"<<valoresObjetos[i]<<" = "<<solucion[i]*valoresObjetos[i]<<endl;
-        valorTotal += (solucion[i]*valoresObjetos[i]);
-    }
-    cout<<"Valor Total: "<<valorTotal;
-    return 0;
-}*/
-
-/*
-int main(){
-    int M = 20;
-    array<int,3> valoresObjetos = {25,24,15}; // b
-    array<int,3> pesosObjetos = {18,15,10}; // p
-    array<double,3> solucion; // X
-    mochila1(M,valoresObjetos,pesosObjetos,solucion);
-
-    double valorTotal = 0;
-    for(int i=0; i<solucion.size();i++){
-        cout<<"Obj "<<i+1<<" => s:"<<solucion[i]<<" | p:"<<pesosObjetos[i]<<" | v:"<<valoresObjetos[i]<<" = "<<solucion[i]*valoresObjetos[i]<<endl;
-        valorTotal += (solucion[i]*valoresObjetos[i]);
-    }
-    cout<<"Valor Total: "<<valorTotal;
-    return 0;
-}
-*/
-
-/*
-// criterio 2 falla
-int main(){
-    int M = 10;
-    array<int,4> valoresObjetos = {10,1,1,1}; // b
-    array<int,4> pesosObjetos = {10,3,3,4}; // p
-    array<double,4> solucion; // X
-    mochila3(M,valoresObjetos,pesosObjetos,solucion);
-
-    double valorTotal = 0;
-    for(int i=0; i<solucion.size();i++){
-        cout<<"Obj "<<i+1<<" => s:"<<solucion[i]<<" | p:"<<pesosObjetos[i]<<" | v:"<<valoresObjetos[i]<<" = "<<solucion[i]*valoresObjetos[i]<<endl;
-        valorTotal += (solucion[i]*valoresObjetos[i]);
-    }
-    cout<<"Valor Total: "<<valorTotal;
-    return 0;
-}*/
-
-/*
-//criterio 1 falla
-int main() {
-    int M = 20;
-    array<int,3> valoresObjetos = {25, 24, 15}; // b
-    array<int,3> pesosObjetos = {18, 15, 10}; // p
-    array<double,3> solucion; // X
-
-    mochila3(M, valoresObjetos, pesosObjetos, solucion);
-
-    cout << "Solución:" << endl;
-    for(int i = 0; i < solucion.size(); i++) {
-        cout << "x[" << i << "] = " << solucion[i] << endl;
-    }
-
-    return 0;
-}*/
-
-int main(){
-    int M = 10;
-    array<int,4> valoresObjetos = {10,1,1,1}; // b
-    array<int,4> pesosObjetos = {10,3,3,4}; // p
-    array<double,4> solucion; // X
-    
-    mochila3(M,valoresObjetos,pesosObjetos,solucion);
-
-    double valorTotal = 0;
-    for(int i=0; i<solucion.size();i++){
-        cout<<"Obj "<<i+1<<" => s:"<<solucion[i]<<" | p:"<<pesosObjetos[i]<<" | v:"<<valoresObjetos[i]<<" = "<<solucion[i]*valoresObjetos[i]<<endl;
-        valorTotal += (solucion[i]*valoresObjetos[i]);
-    }
-    cout<<"Valor Total: "<<valorTotal;
+int main()
+{
+    ejemplo1();
+    cout << endl;
+    ejemplo2();
     return 0;
 }
