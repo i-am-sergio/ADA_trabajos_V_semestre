@@ -1,5 +1,5 @@
-# Matrices Strassen
+# Merge Sort
 
-## Descripción
+## Ejecucion
 
 ![Ruta de la imagen](ejecucion.png)

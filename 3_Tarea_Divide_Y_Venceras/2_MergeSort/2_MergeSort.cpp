@@ -63,8 +63,10 @@ void printVector(int Array[], int size)
 int main(){
     int array1[] = {3, 2, 5, 0, 1, 8, 7, 6, 9, 4};
     int array2[] = {23, 5, 17, 28, 1, 11, 30, 6, 19, 8, 25, 13, 4, 16, 2, 7, 20, 9, 12, 22, 15, 10, 3, 27, 18, 14, 24, 26, 29, 21};
-    printVector(array2, 10);
-    MyMergeSort(array2, 0, 9);
-    printVector(array2, 10);
+    cout<<"Array original:\n";
+    printVector(array2, 30);
+    MyMergeSort(array2, 0, 29);
+    cout<<"Array Ordenado:\n";
+    printVector(array2, 30);
     return 0;
 }
