@@ -20,6 +20,11 @@ int BinarySearchRecursivo(const vector<int>& Array,int elemento, int posIni = 0,
 
 int main(){
     vector<int> numeros = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97};
+    cout <<"Array:\n";
+    for(int i=0; i<numeros.size(); i++){
+        cout << numeros[i] << " ";
+    }
+    cout<<"\n\nElementoBuscado: 67\n";
     int indice = BinarySearchRecursivo(numeros, 67, 0, numeros.size()-1);
     if (indice != -1) {
         cout<<"Elemento: "<<numeros[indice]<<" - Posicion: "<<indice<<endl;
