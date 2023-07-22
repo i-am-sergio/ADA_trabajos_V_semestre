@@ -24,7 +24,7 @@ void printMatrix(Matrix<int>& M){
 }
 
 // Función de cambio con programación dinámica
-int Cambio(int k, int q, vector<int>& c) {
+int CambioDeMonedas(int k, int q, vector<int>& c) {
     // Crear la tabla DP para guardar los resultados de los subproblemas
     Matrix<int> DP(k + 1, vector<int>(q + 1, 0));
 
@@ -82,7 +82,7 @@ int main() {
     cout << "Ingrese la cantidad P que desea obtener de cambio: ";
     cin >> q;
 
-    int resultadoCambio = Cambio(k, q, c);
+    int resultadoCambio = CambioDeMonedas(k, q, c);
     if (resultadoCambio == INF) {
         cout << "No es posible obtener el cambio con las monedas que hay.\n";
     } else {
