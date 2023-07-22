@@ -1,4 +1,4 @@
-# Matrices Strassen
+# Problema de la mochila - Dynamic Programming
 
 ## Ejecucion
 
