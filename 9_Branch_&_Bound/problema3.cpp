@@ -104,7 +104,7 @@ void imprimirAsignaciones(Nodo *min)
         return;
 
     imprimirAsignaciones(min->padre);
-    cout << "Asignar Trabajador " << char(min->idTrabajador + 'A') << " al Trabajo " << min->idTrabajo - 1 << endl;
+    cout << "Asignar Trabajador " << char(min->idTrabajador + 'A') << " al Trabajo " << min->idTrabajo + 1 << endl;
 }
 
 // Encuentra el costo mínimo utilizando Branch and Bound.
