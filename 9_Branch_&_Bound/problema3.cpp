@@ -104,8 +104,7 @@ void imprimirAsignaciones(Nodo *min)
         return;
 
     imprimirAsignaciones(min->padre);
-    cout << "Asignar Trabajador " << char(min->idTrabajador + 'A')
-         << " al Trabajo " << min->idTrabajo << endl;
+    cout << "Asignar Trabajador " << char(min->idTrabajador + 'A') << " al Trabajo " << min->idTrabajo - 1 << endl;
 }
 
 // Encuentra el costo mínimo utilizando Branch and Bound.
@@ -123,7 +122,6 @@ int encontrarCostoMinimo(int matrizCostos[N][N])
 
     // Agregar el nodo ficticio a la lista de nodos vivos;
     colaPrioridad.push(raiz);
-
     // Encuentra un nodo vivo con el menor costo estimado,
     // agrega sus hijos a la lista de nodos vivos y
     // finalmente elimínalo de la lista.
@@ -154,14 +152,10 @@ int encontrarCostoMinimo(int matrizCostos[N][N])
             {
                 // crear un nuevo nodo en el árbol
                 Nodo *hijo = nuevoNodo(i, j, min->asignado, min);
-
                 // costo para los nodos ancestros incluyendo el nodo actual
                 hijo->costoCamino = min->costoCamino + matrizCostos[i][j];
-
                 // calcular su límite inferior
-                hijo->costo = hijo->costoCamino +
-                              calcularCosto(matrizCostos, i, j, hijo->asignado);
-
+                hijo->costo = hijo->costoCamino + calcularCosto(matrizCostos, i, j, hijo->asignado);
                 // Agregar el hijo a la lista de nodos vivos;
                 colaPrioridad.push(hijo);
             }
